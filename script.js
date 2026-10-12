@@ -99,44 +99,82 @@ document.querySelector('.copy-email')?.addEventListener('click', async () => {
   }
 });
 
+// Hero flower tiles, drawn on a canvas so the wordmark can be cut out of them the same way in every
+// browser (CSS masks misbehave in Safari). The tiles drift sideways and move with the scroll; the
+// letter shapes are baked paths in the hero SVG, punched out so the sky shows through.
 const heroTiles = document.querySelector('.hero-tiles');
 if (heroTiles) {
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const OVERLAP = 0.1;            // each flower overlaps the previous by this much of its width
-  const start = performance.now();
-  let tiles = [], step = 0, size = 0;
-  function build() {
-    size = heroTiles.clientHeight;             // one row: tile height = hero height
-    step = size * (1 - OVERLAP);
-    const count = Math.ceil(heroTiles.clientWidth / step) + 3;
-    heroTiles.innerHTML = '';
-    tiles = [];
-    for (let n = 0; n < count; n++) {
-      const img = document.createElement('img');
-      img.src = size > 440 ? 'assets/brand/logo-880.webp' : 'assets/brand/logo-440.webp'; img.alt = ''; img.width = 880; img.height = 880; img.decoding = 'async';
-      img.addEventListener('load', () => img.classList.add('is-loaded'), { once: true }); if (img.complete) img.classList.add('is-loaded');
-      img.style.width = size + 'px'; img.style.height = size + 'px';
-      heroTiles.appendChild(img); tiles.push(img);
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext && canvas.getContext('2d');
+  if (ctx) {
+    heroTiles.appendChild(canvas);
+    heroTiles.closest('.hero').classList.add('is-cut');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const OVERLAP = 0.1;            // each flower overlaps the previous by this much of its width
+    const SKEW = Math.tan(-18 * Math.PI / 180);
+    const heroSvg = document.querySelector('.hero-wordmark .wordmark');
+    const wmFlower = document.querySelector('#wm-flower'), wmIndustries = document.querySelector('#wm-industries');
+    const letters = heroSvg && wmFlower && wmIndustries && typeof Path2D === 'function'
+      ? [new Path2D(wmFlower.getAttribute('d')), new Path2D(wmIndustries.getAttribute('d'))] : null;
+    const start = performance.now();
+    let dpr = 1, size = 0, step = 0, tile = null, flower = null, src = '', loadedAt = 0;
+    function makeTile(img) {
+      // One faded copy of the flower, so the overlapping edges blend into each other.
+      const px = Math.max(1, Math.round(size * dpr));
+      tile = document.createElement('canvas');
+      tile.width = tile.height = px;
+      const t = tile.getContext('2d');
+      t.imageSmoothingQuality = 'high';
+      t.drawImage(img, 0, 0, px, px);
+      const fade = t.createLinearGradient(0, 0, px, 0);
+      fade.addColorStop(0, 'rgba(0,0,0,0)'); fade.addColorStop(0.09, '#000'); fade.addColorStop(0.91, '#000'); fade.addColorStop(1, 'rgba(0,0,0,0)');
+      t.globalCompositeOperation = 'destination-in';
+      t.fillStyle = fade; t.fillRect(0, 0, px, px);
     }
-  }
-  function place(offset) {
-    const span = tiles.length * step;
-    const base = ((-offset % span) + span) % span;
-    for (let n = 0; n < tiles.length; n++) {
-      let x = base + n * step - span;         // start one span to the left
-      while (x < -size) x += span;
-      tiles[n].style.transform = `translateX(${Math.round(x)}px)`;
+    function build() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(heroTiles.clientWidth * dpr);
+      canvas.height = Math.round(heroTiles.clientHeight * dpr);
+      size = heroTiles.clientHeight;             // one row: tile height = hero height
+      step = size * (1 - OVERLAP);
+      const want = size * dpr > 440 ? 'assets/brand/logo-880.webp' : 'assets/brand/logo-440.webp';
+      if (want === src) { if (flower) makeTile(flower); return; }
+      src = want;
+      const img = new Image();
+      img.decoding = 'async';
+      img.onload = () => { if (src !== want) return; flower = img; makeTile(img); if (!loadedAt) loadedAt = performance.now(); draw(performance.now()); };
+      img.src = want;
     }
+    function draw(now) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (!tile) return;
+      ctx.globalAlpha = reduceMotion ? 1 : Math.min(1, (now - loadedAt) / 500);
+      const offset = window.scrollY * 0.6 + (reduceMotion ? 0 : (now - start) * 0.018);
+      const px = size * dpr;
+      for (let x = -(((offset % step) + step) % step) - step; x < heroTiles.clientWidth; x += step) {
+        ctx.drawImage(tile, Math.round(x * dpr), 0, px, px);
+      }
+      ctx.globalAlpha = 1;
+      if (!letters) return;
+      const t = heroTiles.getBoundingClientRect(), r = heroSvg.getBoundingClientRect();
+      const s = r.width / 400;                 // the hero SVG viewBox is 0 20 400 130
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * (r.left - t.left), dpr * (r.top - t.top - 20 * s));
+      ctx.fill(letters[0]);
+      ctx.transform(1, 0, SKEW, 1, 0, 0);       // matches the INDUSTRIES path's skewX(-18) translate(43 0)
+      ctx.translate(43, 0);
+      ctx.lineWidth = 2.6; ctx.lineJoin = 'round';
+      ctx.fill(letters[1]); ctx.stroke(letters[1]);
+    }
+    function frame(now) { draw(now); if (!reduceMotion) requestAnimationFrame(frame); }
+    build();
+    window.addEventListener('resize', () => { build(); draw(performance.now()); });
+    window.addEventListener('load', () => draw(performance.now()));
+    requestAnimationFrame(frame);
+    if (reduceMotion) window.addEventListener('scroll', () => draw(performance.now()), { passive: true });
   }
-  function moveTiles(now) {
-    const drift = reduceMotion ? 0 : (now - start) * 0.018;
-    place(window.scrollY * 0.6 + drift);
-    if (!reduceMotion) requestAnimationFrame(moveTiles);
-  }
-  build(); place(0);
-  window.addEventListener('resize', () => { build(); place(0); });
-  requestAnimationFrame(moveTiles);
-  if (reduceMotion) window.addEventListener('scroll', () => moveTiles(performance.now()), { passive: true });
 }
 
 const castDetail = document.querySelector('#cast-detail');
@@ -167,28 +205,6 @@ if (castDetail) {
     openKey = key; setCards(key); castDetail.classList.add('is-open');
   }));
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && openKey) closeCast(); });
-}
-
-// Hero wordmark cut-out: punch the wordmark's letter shapes out of the flower tiles so the sky shows
-// through. The letters are baked paths (no font needed) turned into an SVG image mask, which Safari
-// handles; it is sized and placed over the visible wordmark.
-const heroSvg = document.querySelector('.hero-wordmark .wordmark');
-const wmFlower = document.querySelector('#wm-flower'), wmIndustries = document.querySelector('#wm-industries');
-if (heroSvg && wmFlower && wmIndustries && heroTiles) {
-  const PAD = 10; // extra room around the 400x130 viewBox so the slanted INDUSTRIES isn't clipped
-  const maskSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-PAD} ${20 - PAD} ${400 + PAD * 2} ${130 + PAD * 2}">`
-    + `<path d="${wmFlower.getAttribute('d')}"/>`
-    + `<path transform="${wmIndustries.getAttribute('transform')}" d="${wmIndustries.getAttribute('d')}" stroke="#000" stroke-width="2.6" stroke-linejoin="round"/></svg>`;
-  heroTiles.style.setProperty('--cutout', `url("data:image/svg+xml,${encodeURIComponent(maskSvg)}")`);
-  function alignCutout() {
-    const t = heroTiles.getBoundingClientRect(), r = heroSvg.getBoundingClientRect();
-    const s = r.width / 400;
-    heroTiles.style.setProperty('--cut-pos', `${r.left - t.left - PAD * s}px ${r.top - t.top - PAD * s}px`);
-    heroTiles.style.setProperty('--cut-size', `${(400 + PAD * 2) * s}px ${(130 + PAD * 2) * s}px`);
-  }
-  alignCutout();
-  window.addEventListener('resize', alignCutout);
-  window.addEventListener('load', alignCutout);
 }
 
 // Forest strips: shuffle the trees into new spots on every page load. Each row (back, front) is
