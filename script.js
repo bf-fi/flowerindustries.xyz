@@ -169,20 +169,25 @@ if (castDetail) {
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && openKey) closeCast(); });
 }
 
-// Hero wordmark cut-out: keep the SVG mask's text aligned with the visible wordmark so the sky shows through the letters.
-const cutout = document.querySelector('#cutout-text');
+// Hero wordmark cut-out: punch the wordmark's letter shapes out of the flower tiles so the sky shows
+// through. The letters are baked paths (no font needed) turned into an SVG image mask, which Safari
+// handles; it is sized and placed over the visible wordmark.
 const heroSvg = document.querySelector('.hero-wordmark .wordmark');
-if (cutout && heroSvg && heroTiles) {
+const wmFlower = document.querySelector('#wm-flower'), wmIndustries = document.querySelector('#wm-industries');
+if (heroSvg && wmFlower && wmIndustries && heroTiles) {
+  const PAD = 10; // extra room around the 400x130 viewBox so the slanted INDUSTRIES isn't clipped
+  const maskSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${-PAD} ${20 - PAD} ${400 + PAD * 2} ${130 + PAD * 2}">`
+    + `<path d="${wmFlower.getAttribute('d')}"/>`
+    + `<path transform="${wmIndustries.getAttribute('transform')}" d="${wmIndustries.getAttribute('d')}" stroke="#000" stroke-width="2.6" stroke-linejoin="round"/></svg>`;
+  heroTiles.style.setProperty('--cutout', `url("data:image/svg+xml,${encodeURIComponent(maskSvg)}")`);
   function alignCutout() {
     const t = heroTiles.getBoundingClientRect(), r = heroSvg.getBoundingClientRect();
     const s = r.width / 400;
-    cutout.setAttribute('transform', `translate(${r.left - t.left} ${r.top - t.top}) scale(${s}) translate(0 -20)`);
-    const c2 = document.querySelector('#cutout-text-2'); if (c2) c2.setAttribute('transform', `scale(${s}) translate(0 -20)`);
-    const bg = document.querySelector('#cutout-bg'); bg.setAttribute('width', t.width); bg.setAttribute('height', t.height);
+    heroTiles.style.setProperty('--cut-pos', `${r.left - t.left - PAD * s}px ${r.top - t.top - PAD * s}px`);
+    heroTiles.style.setProperty('--cut-size', `${(400 + PAD * 2) * s}px ${(130 + PAD * 2) * s}px`);
   }
   alignCutout();
   window.addEventListener('resize', alignCutout);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(alignCutout);
   window.addEventListener('load', alignCutout);
 }
 
