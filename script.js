@@ -211,3 +211,15 @@ document.querySelectorAll('.strip-trees').forEach(forest => {
   if ('ResizeObserver' in window) new ResizeObserver(place).observe(forest);
   else window.addEventListener('resize', place);
 });
+
+// Sprite strips: shuffle the character order on every page load, nudge each one a little
+// left or right, and randomly flip some so they face the other way.
+document.querySelectorAll('.sprite-strip').forEach(strip => {
+  const sprites = [...strip.querySelectorAll(':scope > img')];
+  const order = sprites.map((_, i) => i).sort(() => Math.random() - 0.5);
+  sprites.forEach((sprite, i) => {
+    sprite.style.order = order[i];
+    sprite.style.left = `${((Math.random() - 0.5) * 6).toFixed(2)}%`;
+    if (Math.random() < 0.5) sprite.style.transform = 'scaleX(-1)';
+  });
+});
