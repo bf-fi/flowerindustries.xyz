@@ -105,7 +105,9 @@ document.querySelector('.copy-email')?.addEventListener('click', async () => {
 const heroTiles = document.querySelector('.hero-tiles');
 if (heroTiles) {
   const canvas = document.createElement('canvas');
-  const ctx = canvas.getContext && canvas.getContext('2d');
+  // Display P3 keeps the flower image's wider colors on screens that can show them; others fall back to sRGB.
+  const P3 = { colorSpace: window.matchMedia('(color-gamut: p3)').matches ? 'display-p3' : 'srgb' };
+  const ctx = canvas.getContext && canvas.getContext('2d', P3);
   if (ctx) {
     heroTiles.appendChild(canvas);
     heroTiles.closest('.hero').classList.add('is-cut');
@@ -123,7 +125,7 @@ if (heroTiles) {
       const px = Math.max(1, Math.round(size * dpr));
       tile = document.createElement('canvas');
       tile.width = tile.height = px;
-      const t = tile.getContext('2d');
+      const t = tile.getContext('2d', P3);
       t.imageSmoothingQuality = 'high';
       t.drawImage(img, 0, 0, px, px);
       const fade = t.createLinearGradient(0, 0, px, 0);
@@ -137,7 +139,7 @@ if (heroTiles) {
       canvas.height = Math.round(heroTiles.clientHeight * dpr);
       size = heroTiles.clientHeight;             // one row: tile height = hero height
       step = size * (1 - OVERLAP);
-      const want = size * dpr > 440 ? 'assets/brand/logo-880.webp' : 'assets/brand/logo-440.webp';
+      const want = size * dpr > 440 ? 'assets/brand/logo-880.webp?v=2' : 'assets/brand/logo-440.webp?v=2';
       if (want === src) { if (flower) makeTile(flower); return; }
       src = want;
       const img = new Image();
