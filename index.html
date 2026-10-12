@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <link rel="canonical" href="https://flowerindustries.xyz/">
+  <meta name="description" content="Flower Industries is an independent game studio making Legal Beagll: Justice is Argued, a courtroom RPG planned for Steam.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://flowerindustries.xyz/">
+  <meta property="og:site_name" content="Flower Industries">
+  <meta property="og:image" content="https://flowerindustries.xyz/assets/brand/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta property="og:title" content="Flower Industries, makers of Legal Beagll">
+  <meta property="og:description" content="Flower Industries is an independent game studio making Legal Beagll: Justice is Argued, a courtroom RPG planned for Steam.">
+  <title>Flower Industries · Indie game studio, makers of Legal Beagll</title>
+  <link rel="icon" href="assets/brand/favicon.ico" sizes="any">
+  <link rel="icon" href="assets/brand/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/brand/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Nunito:wght@400..800&family=Pixelify+Sans:wght@400..700&family=Audiowide&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/brand/logo-880.webp" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+  <script src="sky.js" defer></script>
+  </head>
+<body>
+  <canvas class="page-sky" aria-hidden="true"></canvas>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <svg class="svg-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <filter id="white-outline" x="-5%" y="-10%" width="110%" height="120%" color-interpolation-filters="sRGB"><feMorphology in="SourceAlpha" operator="dilate" radius="4" result="d"/><feFlood flood-color="#fafaf8"/><feComposite in2="d" operator="in" result="o"/><feMerge><feMergeNode in="o"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <mask id="hero-cutout" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="4000" height="4000"><rect id="cutout-bg" x="0" y="0" width="4000" height="4000" fill="#fff"/><g id="cutout-text" fill="#000"><text x="10" y="88" text-anchor="start" font-size="80" letter-spacing="-2">flower</text><text transform="skewX(-18) translate(43 0)" x="200" y="132" text-anchor="middle" textLength="380" lengthAdjust="spacing" font-size="46" stroke="#000" stroke-width="2.6" paint-order="stroke fill" stroke-linejoin="round">INDUSTRIES</text></g></mask>
+    <mask id="hero-cutout-2" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="4000" height="4000"><rect x="0" y="0" width="4000" height="4000" fill="#fff"/><g id="cutout-text-2" fill="#000"><text x="10" y="88" text-anchor="start" font-size="80" letter-spacing="-2">flower</text><text transform="skewX(-18) translate(43 0)" x="200" y="132" text-anchor="middle" textLength="380" lengthAdjust="spacing" font-size="46" stroke="#000" stroke-width="2.6" paint-order="stroke fill" stroke-linejoin="round">INDUSTRIES</text></g></mask>
+    <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="arrow-up" viewBox="0 0 24 24"><path d="M6 18 18 6M6 6h12v12" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="steam" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="16.5" cy="7.5" r="4.5"/><circle cx="16.5" cy="7.5" r="2.4"/><circle cx="8.5" cy="17" r="3.5"/><path d="m11.5 6.5-5 7.4M20.6 9.4l-9.3 9.4M1 11.4l8.3 3.9a1.9 1.9 0 0 1-1.7 3.4L1 15.8"/></g></symbol>
+  </svg>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#home" aria-label="Flower Industries home"><img class="brand-logo" src="assets/brand/bee-128.png" alt="" width="44" height="44"><svg class="wordmark" viewBox="0 20 400 130" role="img" aria-label="Flower Industries"><text x="10" y="88" text-anchor="start" font-size="80" letter-spacing="-2">flower</text><text class="wm-bold" transform="skewX(-18) translate(43 0)" x="200" y="132" text-anchor="middle" textLength="380" lengthAdjust="spacing" font-size="46">INDUSTRIES</text></svg></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav"><span>Menu</span><span class="menu-lines" aria-hidden="true"></span></button>
+      <nav id="primary-nav" class="nav" aria-label="Main navigation">
+        <a href="#game">Our game</a><a href="#cast">Cast</a><a href="#studio">About</a><a class="nav-contact" href="contact.html">Contact <svg aria-hidden="true"><use href="#arrow-up"/></svg></a>
+      </nav>
+    </div>
+  </header>
+  <main id="main">
+    <section id="home" class="hero" aria-labelledby="hero-title">
+      <div class="hero-tiles" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1 id="hero-title" class="hero-wordmark"><svg class="wordmark" viewBox="0 20 400 130" aria-hidden="true"><text x="10" y="88" text-anchor="start" font-size="80" letter-spacing="-2">flower</text><text class="wm-bold" transform="skewX(-18) translate(43 0)" x="200" y="132" text-anchor="middle" textLength="380" lengthAdjust="spacing" font-size="46">INDUSTRIES</text></svg><span class="sr-only">Flower Industries</span></h1>
+        </div>
+        <div class="hero-bottom"><span></span><a href="#game">SCROLL <span aria-hidden="true">↓</span></a></div>
+      </div>
+    </section>
+
+    <section id="game" class="game-section section-pad" aria-labelledby="game-section-title">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow"><span class="section-number">01 /</span> OUR GAME</p></div>
+        <div class="game-intro"><h2 id="game-section-title">Court is in session,</h2></div>
+        <article class="featured-game showcase">
+          <a class="showcase-art" href="https://store.steampowered.com/app/3988040/Legal_Beagll_Justice_is_Argued/" target="_blank" rel="noopener noreferrer" aria-label="Explore Legal Beagll: Justice is Argued on Steam (opens in a new tab)">
+            <img class="cover-img" src="assets/legal-beagll-cover.webp" srcset="assets/legal-beagll-cover.webp 600w, assets/legal-beagll-cover-1200.webp 1200w" sizes="(max-width: 800px) 360px, 460px" alt="Legal Beagll cover: the neon title above Benny, a beagle in a pinstripe suit, on a teal striped background." loading="lazy" decoding="async" width="600" height="900" style="background-image:url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAAAAAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAAkABgDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAUEAgf/xAArEAABAwMCAwcFAAAAAAAAAAABAgMEAAURITESQWEGExQiUXHwIzJSkaH/xAAXAQADAQAAAAAAAAAAAAAAAAABAgMA/8QAIBEAAgICAQUBAAAAAAAAAAAAAQIAAxEhMRITFCJhUf/aAAwDAQACEQMRAD8Av366vogERkPR5CgSknlyyfnKoLt2mk8JefyNCfyAxnoM5P7FUO0sl6VOUuOuOY7SQEq79JKuZIA1qQ5ClMMRu9cYCJGVoTurBO5G3Wq92qsexm8XvHqVsfACZvs0uU7cXAwC4SF6LUcJwrbf2FK6ssPwU1uS9PjIQQoqb7zhUSc7g9daUGdW2vECgVemc4k65x27ZPdakOENIUUlXqDt861RWu2S7Eh2epLTkNJS3wOFzKQPKrbnms3aqLJF0LwQBHcPGonXB5pPWsKLipcNxhoJIfIBOdTjYY5a0DQrHP7J1lqq8HWM4+7mllgXKSW4zieIAHU/d7e29KmjxUSRHe4SVqV9NspIUNSNB6mlLVQKlCA6gtTynNjDc9Hu0FmfGDL5UE8WfLoahx+zUOI8h9h6ShaFZT5hp/KUqi8RiASZWMZuRKbnPguPtpKEKOyR0FKUqZ5jjif/2Q==)" onload="this.classList.add('is-loaded')">
+          </a>
+          <div class="game-copy">
+            <div class="game-tags"><span>COURTROOM RPG</span><span>IN DEVELOPMENT</span><span>WINDOWS · MAC · IOS · ANDROID</span></div>
+            <h3><img class="game-wordmark keyart" src="assets/legal-beagll-key-art.webp" alt="Benny, a beagle in a pinstripe suit, striking a pose in front of neon stripes." width="1200" height="628"><span>Justice is Argued</span></h3>
+            <p>You play Harold Beagll, a golden retriever attorney. Between trials you walk around Beagll Town, talking to suspects and digging up clues.</p>
+            <p>In court, every fight is a turn-based argument. Witnesses and prosecutors argue back. A good objection can wear them down or win over the jury, and a bad one leaves Harold tongue-tied.</p>
+            <a class="button button-light" href="https://store.steampowered.com/app/3988040/Legal_Beagll_Justice_is_Argued/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#steam"/></svg> Wishlist on Steam <svg aria-hidden="true"><use href="#arrow-up"/></svg><span class="sr-only"> (opens in a new tab)</span></a>
+            <p class="release-note"><span class="status-dot"></span> Planned for December 2026</p>
+          </div>
+        </article>
+        <div id="cast" class="cast" aria-labelledby="cast-title">
+          <div class="cast-heading"><span class="eyebrow">THE CAST</span><h3 id="cast-title">A few people you’ll run into</h3></div>
+          <ul class="cast-grid">
+            <li class="cast-card"><button type="button" class="cast-toggle" aria-expanded="false" aria-controls="cast-detail" data-cast="harold"><img src="assets/cast/harold.png" alt="Portrait of Harold Beagll, a golden retriever in a blue suit and red tie." width="565" height="640" loading="lazy"><span class="sr-only">Show details for Harold Beagll</span></button>
+              <template><div class="cast-detail-inner"><img class="cast-detail-sprite" src="assets/cast/sprite-harold.png" alt="" width="60" height="120"><div><p class="eyebrow">DEFENSE ATTORNEY</p><h4>Harold Beagll</h4><p>A golden retriever with a law degree and a habit of believing his clients. Harold took over a one-room practice in Beagll Town and has been arguing his way out of trouble ever since.</p><blockquote>“Objection is just a fancy word for “wait, what?””</blockquote></div></div></template>
+            </li>
+            <li class="cast-card"><button type="button" class="cast-toggle" aria-expanded="false" aria-controls="cast-detail" data-cast="luna"><img src="assets/cast/luna.png" alt="Portrait of Luna Morrow, smiling in a pink blouse with a bow." width="565" height="640" loading="lazy"><span class="sr-only">Show details for Luna Morrow</span></button>
+              <template><div class="cast-detail-inner"><img class="cast-detail-sprite" src="assets/cast/sprite-luna.png" alt="" width="64" height="108"><div><p class="eyebrow">WITNESS, SOMETIMES</p><h4>Luna Morrow</h4><p>Runs the flower stall by the courthouse steps and sees everything that happens on them. Sweet, patient, and never quite as surprised as she looks.</p><blockquote>“Everybody in this town has a secret. Mine are mostly about soil.”</blockquote></div></div></template>
+            </li>
+            <li class="cast-card"><button type="button" class="cast-toggle" aria-expanded="false" aria-controls="cast-detail" data-cast="charlie"><img src="assets/cast/charlie.png" alt="Portrait of Charlie Snibb, a stern dog in a teal suit." width="565" height="640" loading="lazy"><span class="sr-only">Show details for Charlie Snibb</span></button>
+              <template><div class="cast-detail-inner"><img class="cast-detail-sprite" src="assets/cast/sprite-charlie.png" alt="" width="15" height="28"><div><p class="eyebrow">PROSECUTOR</p><h4>Charlie Snibb</h4><p>The prosecutor who never loses, according to the prosecutor. Sharp suit, sharper tone, and a filing cabinet of grudges with Harold’s name on most of them.</p><blockquote>“I don’t need a theory of the case. I have a theory of you.”</blockquote></div></div></template>
+            </li>
+            <li class="cast-card"><button type="button" class="cast-toggle" aria-expanded="false" aria-controls="cast-detail" data-cast="sam"><img src="assets/cast/sam.png" alt="Portrait of Samuel B. Ruffles, a hound wearing a gold chain of office." width="565" height="640" loading="lazy"><span class="sr-only">Show details for Samuel B. Ruffles</span></button>
+              <template><div class="cast-detail-inner"><img class="cast-detail-sprite" src="assets/cast/sprite-sam.png" alt="" width="56" height="116"><div><p class="eyebrow">PRESIDING JUDGE</p><h4>Samuel B. Ruffles</h4><p>Has presided over Beagll Town’s courtroom for longer than anyone can remember and would like everyone to speak up. Fair, slow, and very fond of his gavel.</p><blockquote>“Overruled. And good morning.”</blockquote></div></div></template>
+            </li>
+          </ul>
+          <div id="cast-detail" class="cast-detail" aria-live="polite"><div class="cast-detail-clip"><div class="cast-detail-body"></div></div></div>
+        </div>
+        <div class="screenshots-heading"><span class="eyebrow">A LOOK INSIDE BEAGLL TOWN</span><span>In-game screenshots <span aria-hidden="true">↙</span></span></div>
+        <div class="screenshots">
+          <a class="screenshot" href="assets/game-screenshot-1-full.webp" data-lightbox data-caption="Harold’s law office" aria-label="Enlarge screenshot: Harold’s law office"><img src="assets/game-screenshot-1-960.webp" srcset="assets/game-screenshot-1-960.webp 960w, assets/game-screenshot-1.webp 1920w" sizes="(max-width: 560px) 100vw, (max-width: 800px) 50vw, 430px" alt="Pixel art gameplay inside a wood-paneled law office." width="1920" height="1080" loading="lazy" decoding="async"><span>Harold’s law office <span aria-hidden="true">↗</span></span></a>
+          <a class="screenshot" href="assets/game-screenshot-2-full.webp" data-lightbox data-caption="Talking with Luna after dark" aria-label="Enlarge screenshot: Talking with Luna after dark"><img src="assets/game-screenshot-2-960.webp" srcset="assets/game-screenshot-2-960.webp 960w, assets/game-screenshot-2.webp 1920w" sizes="(max-width: 560px) 100vw, (max-width: 800px) 50vw, 430px" alt="A conversation with Luna Morrow beneath a moonlit sky." width="1920" height="1080" loading="lazy" decoding="async"><span>Talking with Luna after dark <span aria-hidden="true">↗</span></span></a>
+          <a class="screenshot" href="assets/game-screenshot-3-full.webp" data-lightbox data-caption="Judge Ruffles opens court" aria-label="Enlarge screenshot: Judge Ruffles opens court"><img src="assets/game-screenshot-3-960.webp" srcset="assets/game-screenshot-3-960.webp 960w, assets/game-screenshot-3.webp 1920w" sizes="(max-width: 560px) 100vw, (max-width: 800px) 50vw, 430px" alt="A canine judge presiding over a courtroom in Legal Beagll." width="1920" height="1080" loading="lazy" decoding="async"><span>Judge Ruffles opens court <span aria-hidden="true">↗</span></span></a>
+        </div>
+      </div>
+    </section>
+
+    <section id="studio" class="studio-section section-pad" aria-label="About us">
+      <div class="container">
+        <div class="section-heading"><p class="eyebrow"><span class="section-number">02 /</span> ABOUT US</p></div>
+        <div class="studio-content"><div class="studio-copy"><p>Flower Industries is a small independent studio founded in 2024. Legal Beagll is our first game, and it’s where all of our time goes right now.</p><p>If you want to follow along, wishlist the game on Steam.</p><a class="text-link" href="contact.html">Get in touch <svg aria-hidden="true"><use href="#arrow-up"/></svg></a></div></div>
+        <div class="studio-statement"><span>FOUNDED 2024</span><span>INDEPENDENT</span><span>STEAM PARTNER</span></div>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-section section-pad has-forest" aria-labelledby="contact-title">
+      <div class="sprite-strip forest-bg" aria-hidden="true"><div class="strip-trees" aria-hidden="true"><img src="assets/sky/tree_e.png" alt="" class="" style="left:22%;height:560px;"><img src="assets/sky/tree_d.png" alt="" class="" style="left:47%;height:580px;"><img src="assets/sky/tree_a.png" alt="" class="" style="left:68%;height:640px;"><img src="assets/sky/tree_c.png" alt="" class="" style="left:82%;height:660px;transform:scaleX(-1);"><img src="assets/sky/tree_d.png" alt="" class="" style="left:-14%;height:600px;transform:scaleX(-1);"><img src="assets/sky/tree_d.png" alt="" class="front" style="left:14%;height:520px;transform:scaleX(-1);"><img src="assets/sky/tree_f.png" alt="" class="front" style="left:54%;height:540px;"></div><img src="assets/cast/sprite-harold.png" alt="" width="60" height="120" loading="lazy"><img src="assets/cast/sprite-luna.png" alt="" width="64" height="108" loading="lazy"><img src="assets/cast/sprite-charles.png" alt="" width="64" height="108" loading="lazy"><img src="assets/cast/sprite-sam.png" alt="" width="56" height="116" loading="lazy"><img src="assets/cast/sprite-lovell.png" alt="" width="60" height="120" loading="lazy"></div>
+      <div class="container contact-content">
+        <p class="eyebrow"><span class="section-number">03 /</span> CONTACT</p>
+        <div class="contact-main"><h2 id="contact-title">Questions?<br><em>Email us.</em></h2><a class="contact-orb" href="mailto:socials@flowerindustries.xyz" aria-label="Email Flower Industries"><svg aria-hidden="true"><use href="#arrow-up"/></svg></a></div>
+        <div class="contact-details"><p>Press, business, bug reports, or you want to talk about dogs in suits.</p><div class="email-row"><a href="mailto:socials@flowerindustries.xyz">socials@flowerindustries.xyz</a><button class="copy-email" type="button" aria-label="Copy email address" title="Copy email address"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M15 5V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h1"/></svg></button></div></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-top">
+      <a class="brand" href="index.html" aria-label="Flower Industries home"><img class="brand-logo" src="assets/brand/bee-128.png" alt="" width="44" height="44"><svg class="wordmark" viewBox="0 20 400 130" role="img" aria-label="Flower Industries"><text x="10" y="88" text-anchor="start" font-size="80" letter-spacing="-2">flower</text><text class="wm-bold" transform="skewX(-18) translate(43 0)" x="200" y="132" text-anchor="middle" textLength="380" lengthAdjust="spacing" font-size="46">INDUSTRIES</text></svg></a>
+      <div class="footer-links"><a href="https://store.steampowered.com/app/3988040/Legal_Beagll_Justice_is_Argued/" target="_blank" rel="noopener noreferrer">Steam <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.youtube.com/@FlowerIndustries" target="_blank" rel="noopener noreferrer">YouTube <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.twitch.tv/directory/category/legal-beagll-justice-is-argued" target="_blank" rel="noopener noreferrer">Twitch <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.tiktok.com/@flower.industries" target="_blank" rel="noopener noreferrer">TikTok <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.instagram.com/legalbeagll/" target="_blank" rel="noopener noreferrer">Instagram <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://bsky.app/profile/legalbeagll.bsky.social" target="_blank" rel="noopener noreferrer">Bluesky <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+    </div>
+    <div class="container footer-bottom"><span>© <span id="year">2026</span> Flower Industries LLC. All rights reserved.</span><span>MADE IN CALIFORNIA</span></div>
+  </footer>
+  <dialog class="lightbox" aria-label="Game screenshot viewer"><div class="lightbox-toolbar"><p id="lightbox-caption"></p><button type="button" class="lightbox-close" aria-label="Close screenshot viewer">Close <span aria-hidden="true">×</span></button></div><img id="lightbox-image" src="" alt=""><div class="lightbox-controls"><button type="button" id="previous-image" aria-label="Previous screenshot">←</button><span id="image-count" aria-live="polite"></span><button type="button" id="next-image" aria-label="Next screenshot">→</button></div></dialog>
+  <div class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
