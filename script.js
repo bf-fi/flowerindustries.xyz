@@ -154,7 +154,7 @@ if (heroTiles) {
       const offset = window.scrollY * 0.6 + (reduceMotion ? 0 : (now - start) * 0.018);
       const px = size * dpr;
       for (let x = -(((offset % step) + step) % step) - step; x < heroTiles.clientWidth; x += step) {
-        ctx.drawImage(tile, Math.round(x * dpr), 0, px, px);
+        ctx.drawImage(tile, x * dpr, 0, px, px);   // no rounding: whole-pixel steps make the slow drift stutter
       }
       ctx.globalAlpha = 1;
       if (!letters) return;
