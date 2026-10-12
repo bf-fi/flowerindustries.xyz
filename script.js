@@ -192,7 +192,13 @@ if (cutout && heroSvg && heroTiles) {
 document.querySelectorAll('.strip-trees').forEach(forest => {
   const trees = [...forest.querySelectorAll('img')];
   const rows = [trees.filter(t => !t.classList.contains('front')), trees.filter(t => t.classList.contains('front'))];
-  rows.forEach(row => {
+  rows.forEach((row, r) => {
+    // The darkening filter lives on a row wrapper, not the flipped trees: Firefox clips a filtered,
+    // mirrored image on the wrong side when it hangs past the strip edge.
+    const wrap = document.createElement('div');
+    wrap.className = r ? 'tree-row front' : 'tree-row';
+    wrap.append(...row);
+    forest.append(wrap);
     const slots = row.map((_, i) => i).sort(() => Math.random() - 0.5);
     row.forEach((tree, i) => {
       tree.dataset.spot = (slots[i] + 0.5 + (Math.random() - 0.5) * 0.4) / row.length;
