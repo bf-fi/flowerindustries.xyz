@@ -26,6 +26,45 @@
   <link rel="stylesheet" href="styles.css">
   <script src="script.js" defer></script>
   <script src="sky.js" defer></script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://flowerindustries.xyz/#organization",
+        "name": "Flower Industries",
+        "legalName": "Flower Industries LLC",
+        "url": "https://flowerindustries.xyz/",
+        "logo": "https://flowerindustries.xyz/assets/brand/bee-128.png",
+        "email": "socials@flowerindustries.xyz",
+        "foundingDate": "2024",
+        "sameAs": [
+          "https://www.youtube.com/@FlowerIndustries",
+          "https://www.tiktok.com/@flower.industries",
+          "https://www.instagram.com/legalbeagll/",
+          "https://bsky.app/profile/legalbeagll.bsky.social"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://flowerindustries.xyz/#website",
+        "name": "Flower Industries",
+        "url": "https://flowerindustries.xyz/",
+        "publisher": { "@id": "https://flowerindustries.xyz/#organization" }
+      },
+      {
+        "@type": "VideoGame",
+        "name": "Legal Beagll: Justice is Argued",
+        "description": "A courtroom RPG in development, planned for Steam.",
+        "gamePlatform": "Windows PC",
+        "url": "https://store.steampowered.com/app/3988040/Legal_Beagll_Justice_is_Argued/",
+        "author": { "@id": "https://flowerindustries.xyz/#organization" },
+        "publisher": { "@id": "https://flowerindustries.xyz/#organization" }
+      }
+    ]
+  }
+  </script>
   </head>
 <body>
   <canvas class="page-sky" aria-hidden="true"></canvas>
