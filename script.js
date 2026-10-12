@@ -187,15 +187,15 @@ if (cutout && heroSvg && heroTiles) {
 }
 
 // Forest strips: shuffle the trees into new spots on every page load. Each row (back, front) is
-// split into even slots with a random nudge inside each, so trees spread out instead of bunching,
-// and every tree is kept fully inside its strip so none get cut off at the edges.
+// spread evenly across the full width with a small random nudge, so trees never stack up.
+// Edge trees are allowed to hang past the sides.
 document.querySelectorAll('.strip-trees').forEach(forest => {
   const trees = [...forest.querySelectorAll('img')];
   const rows = [trees.filter(t => !t.classList.contains('front')), trees.filter(t => t.classList.contains('front'))];
   rows.forEach(row => {
     const slots = row.map((_, i) => i).sort(() => Math.random() - 0.5);
     row.forEach((tree, i) => {
-      tree.dataset.spot = (slots[i] + 0.2 + Math.random() * 0.6) / row.length;
+      tree.dataset.spot = (slots[i] + 0.5 + (Math.random() - 0.5) * 0.4) / row.length;
       tree.style.transform = Math.random() < 0.5 ? 'scaleX(-1)' : '';
     });
   });
@@ -203,7 +203,7 @@ document.querySelectorAll('.strip-trees').forEach(forest => {
     const width = forest.clientWidth;
     trees.forEach(tree => {
       const w = tree.offsetWidth;
-      tree.style.left = `${Math.max(0, Math.min(width - w, tree.dataset.spot * width - w / 2))}px`;
+      tree.style.left = `${tree.dataset.spot * width - w / 2}px`;
     });
   }
   place();
