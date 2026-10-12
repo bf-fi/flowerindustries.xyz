@@ -170,7 +170,11 @@ if (heroTiles) {
     }
     function frame(now) { draw(now); if (!reduceMotion) requestAnimationFrame(frame); }
     build();
-    window.addEventListener('resize', () => { build(); draw(performance.now()); });
+    // Rebuild whenever the panel changes size, not just the window: fonts loading late can change its
+    // height after the first build, which would leave the drawing stretched and the cut-out misaligned.
+    const rebuild = () => { build(); draw(performance.now()); };
+    if ('ResizeObserver' in window) new ResizeObserver(rebuild).observe(heroTiles);
+    else window.addEventListener('resize', rebuild);
     window.addEventListener('load', () => draw(performance.now()));
     requestAnimationFrame(frame);
     if (reduceMotion) window.addEventListener('scroll', () => draw(performance.now()), { passive: true });
