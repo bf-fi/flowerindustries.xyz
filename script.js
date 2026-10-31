@@ -139,7 +139,8 @@ if (heroTiles) {
       canvas.height = Math.round(heroTiles.clientHeight * dpr);
       size = heroTiles.clientHeight;             // one row: tile height = hero height
       step = size * (1 - OVERLAP);
-      const want = size * dpr > 440 ? 'assets/brand/logo-880.webp?v=2' : 'assets/brand/logo-440.webp?v=2';
+      // Same query as the <link rel="preload" media> tags in index.html, so the preloaded file is the one drawn.
+      const want = window.matchMedia('(min-width: 561px)').matches ? 'assets/brand/logo-880.webp?v=2' : 'assets/brand/logo-440.webp?v=2';
       if (want === src) { if (flower) makeTile(flower); return; }
       src = want;
       const img = new Image();
@@ -170,7 +171,10 @@ if (heroTiles) {
       ctx.lineWidth = 2.6; ctx.lineJoin = 'round';
       ctx.fill(letters[1]); ctx.stroke(letters[1]);
     }
-    function frame(now) { draw(now); if (!reduceMotion) requestAnimationFrame(frame); }
+    // The drift loop only runs while the hero is on screen; once the reader scrolls past it there is nothing to show.
+    let running = false;
+    function frame(now) { if (!running) return; draw(now); requestAnimationFrame(frame); }
+    function run() { if (running || reduceMotion) return; running = true; requestAnimationFrame(frame); }
     build();
     // Rebuild whenever the panel changes size, not just the window: fonts loading late can change its
     // height after the first build, which would leave the drawing stretched and the cut-out misaligned.
@@ -178,7 +182,11 @@ if (heroTiles) {
     if ('ResizeObserver' in window) new ResizeObserver(rebuild).observe(heroTiles);
     else window.addEventListener('resize', rebuild);
     window.addEventListener('load', () => draw(performance.now()));
-    requestAnimationFrame(frame);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting) { draw(performance.now()); run(); } else running = false;
+      }).observe(heroTiles);
+    } else run();
     if (reduceMotion) window.addEventListener('scroll', () => draw(performance.now()), { passive: true });
   }
 }
