@@ -29,19 +29,34 @@ const screenshotLinks = [...document.querySelectorAll('[data-lightbox]')];
 const lightboxImage = document.querySelector('#lightbox-image');
 let currentImage = 0;
 let returnFocus;
-// Warm the browser cache with the full-size lightbox images once the page is
-// idle, so the first click opens instantly. Skipped on data-saver / slow links.
+// The full-size screenshots are lossless and add up to about 2 MB, so they are only fetched on a sign of
+// intent: hovering or focusing a thumbnail (desktop), or opening the viewer, which also fetches the two
+// neighbours the arrows lead to. Touch devices download nothing until a tap. Skipped on data-saver / slow links.
 const conn = navigator.connection;
-if (!(conn && (conn.saveData || /2g/.test(conn.effectiveType || '')))) {
-  const warm = () => screenshotLinks.forEach(link => { const i = new Image(); i.fetchPriority = 'low'; i.src = link.href; });
-  const idle = () => ('requestIdleCallback' in window ? requestIdleCallback(warm, { timeout: 4000 }) : setTimeout(warm, 1500));
-  document.readyState === 'complete' ? idle() : addEventListener('load', idle, { once: true });
+const saveData = !!(conn && (conn.saveData || /2g/.test(conn.effectiveType || '')));
+const warmed = new Set();
+function warm(index) {
+  const link = screenshotLinks[(index + screenshotLinks.length) % screenshotLinks.length];
+  if (saveData || warmed.has(link)) return;
+  warmed.add(link);
+  const i = new Image(); i.fetchPriority = 'low'; i.src = link.href;
 }
+screenshotLinks.forEach((link, index) => {
+  link.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') warm(index); });
+  link.addEventListener('focus', () => warm(index));
+});
 function showImage(index) {
   currentImage = (index + screenshotLinks.length) % screenshotLinks.length;
   const link = screenshotLinks[currentImage];
-  lightboxImage.src = link.href;
-  lightboxImage.alt = link.querySelector('img').alt;
+  const thumb = link.querySelector('img');
+  // Show the thumbnail the page already has, then swap in the full-size file once it has arrived.
+  lightboxImage.src = thumb.currentSrc || thumb.src;
+  lightboxImage.alt = thumb.alt;
+  const shown = currentImage;
+  const full = new Image();
+  full.onload = () => { if (currentImage === shown) lightboxImage.src = link.href; };
+  full.src = link.href;
+  warm(shown + 1); warm(shown - 1);
   document.querySelector('#lightbox-caption').textContent = link.dataset.caption;
   document.querySelector('#image-count').textContent = `${currentImage + 1} / ${screenshotLinks.length}`;
 }
@@ -262,5 +277,23 @@ document.querySelectorAll('.sprite-strip').forEach(strip => {
     sprite.style.order = order[i];
     sprite.style.left = `${((Math.random() - 0.5) * 6).toFixed(2)}%`;
     if (Math.random() < 0.5) sprite.style.transform = 'scaleX(-1)';
+  });
+});
+
+// Trailer: a local poster stands in for the YouTube player until the visitor presses play, so nothing is
+// requested from Google before that (see privacy.html). The block stays hidden until a video ID is set.
+document.querySelectorAll('.video-facade').forEach(facade => {
+  const id = facade.dataset.video;
+  if (!id) return;
+  facade.closest('.trailer')?.removeAttribute('hidden');
+  facade.querySelector('.video-play').addEventListener('click', () => {
+    const frame = document.createElement('iframe');
+    frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1`;
+    frame.title = facade.dataset.title || 'Trailer';
+    frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    frame.allowFullscreen = true;
+    frame.referrerPolicy = 'strict-origin-when-cross-origin';
+    facade.replaceChildren(frame);
+    frame.focus();
   });
 });
