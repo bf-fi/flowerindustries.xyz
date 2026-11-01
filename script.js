@@ -281,11 +281,14 @@ document.querySelectorAll('.sprite-strip').forEach(strip => {
 });
 
 // Trailer: a local poster stands in for the YouTube player until the visitor presses play, so nothing is
-// requested from Google before that (see privacy.html). The block stays hidden until a video ID is set.
+// requested from Google before that (see privacy.html). To publish it, set data-video to the YouTube video ID
+// and delete the hidden attribute from #trailer in the same edit; the script re-hides the block if the ID is
+// ever empty. Without JavaScript the facade is hidden by the page's noscript style and the heading's
+// "Watch on YouTube" link stands in.
 document.querySelectorAll('.video-facade').forEach(facade => {
   const id = facade.dataset.video;
+  facade.closest('.trailer')?.toggleAttribute('hidden', !id);
   if (!id) return;
-  facade.closest('.trailer')?.removeAttribute('hidden');
   facade.querySelector('.video-play').addEventListener('click', () => {
     const frame = document.createElement('iframe');
     frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1`;
