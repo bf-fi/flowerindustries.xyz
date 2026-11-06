@@ -24,10 +24,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..700,0..100,0..1;1,9..144,300..700,0..100,0..1&family=Nunito:wght@400..800&family=Pixelify+Sans:wght@400..700&family=Audiowide&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/brand/logo-880.webp" fetchpriority="high">
-  <link rel="stylesheet" href="styles.css?v=5">
-  <script src="script.js?v=7" defer></script>
-  <script src="sky.js?v=4" defer></script>
+  <link rel="preload" as="image" href="assets/brand/logo-880.webp?v=2" media="(min-width: 561px)" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/brand/logo-440.webp?v=2" media="(max-width: 560px)" fetchpriority="high">
+  <link rel="stylesheet" href="styles.css?v=7">
+  <script src="script.js?v=9" defer></script>
+  <script src="sky.js?v=5" defer></script>
+  <noscript><style>.hero{background:transparent}.hero-bottom{color:var(--text)}.video-facade{display:none}</style></noscript>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -59,7 +61,8 @@
         "@type": "VideoGame",
         "name": "Legal Beagll: Justice is Argued",
         "description": "A courtroom RPG in development, planned for Steam.",
-        "gamePlatform": "Windows PC",
+        "image": "https://flowerindustries.xyz/assets/legal-beagll-cover-1200.webp",
+        "gamePlatform": ["Windows PC", "macOS", "iOS", "Android"],
         "url": "https://store.steampowered.com/app/3988040/Legal_Beagll_Justice_is_Argued/",
         "author": { "@id": "https://flowerindustries.xyz/#organization" },
         "publisher": { "@id": "https://flowerindustries.xyz/#organization" }
@@ -103,11 +106,11 @@
         <div class="game-intro"><h2 id="game-section-title">Court is in session,</h2></div>
         <article class="featured-game showcase">
           <a class="showcase-art" href="https://store.steampowered.com/app/3988040/Legal_Beagll_Justice_is_Argued/" target="_blank" rel="noopener noreferrer" aria-label="Explore Legal Beagll: Justice is Argued on Steam (opens in a new tab)">
-            <img class="cover-img" src="assets/legal-beagll-cover.webp" srcset="assets/legal-beagll-cover.webp 600w, assets/legal-beagll-cover-1200.webp 1200w" sizes="(max-width: 800px) 360px, 460px" alt="Legal Beagll cover: the neon title above Benny, a beagle in a pinstripe suit, on a teal striped background." loading="lazy" decoding="async" width="600" height="900" style="background-image:url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAAAAAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAAkABgDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAUEAgf/xAArEAABAwMCAwcFAAAAAAAAAAABAgMEAAURITESQWEGExQiUXHwIzJSkaH/xAAXAQADAQAAAAAAAAAAAAAAAAABAgMA/8QAIBEAAgICAQUBAAAAAAAAAAAAAQIAAxEhMRITFCJhUf/aAAwDAQACEQMRAD8Av366vogERkPR5CgSknlyyfnKoLt2mk8JefyNCfyAxnoM5P7FUO0sl6VOUuOuOY7SQEq79JKuZIA1qQ5ClMMRu9cYCJGVoTurBO5G3Wq92qsexm8XvHqVsfACZvs0uU7cXAwC4SF6LUcJwrbf2FK6ssPwU1uS9PjIQQoqb7zhUSc7g9daUGdW2vECgVemc4k65x27ZPdakOENIUUlXqDt861RWu2S7Eh2epLTkNJS3wOFzKQPKrbnms3aqLJF0LwQBHcPGonXB5pPWsKLipcNxhoJIfIBOdTjYY5a0DQrHP7J1lqq8HWM4+7mllgXKSW4zieIAHU/d7e29KmjxUSRHe4SVqV9NspIUNSNB6mlLVQKlCA6gtTynNjDc9Hu0FmfGDL5UE8WfLoahx+zUOI8h9h6ShaFZT5hp/KUqi8RiASZWMZuRKbnPguPtpKEKOyR0FKUqZ5jjif/2Q==)" onload="this.classList.add('is-loaded')">
+            <img class="cover-img" src="assets/legal-beagll-cover.webp" srcset="assets/legal-beagll-cover.webp 600w, assets/legal-beagll-cover-1200.webp 1200w" sizes="(max-width: 800px) 360px, 460px" alt="Legal Beagll cover: the neon title above Benny, a beagle in a pinstripe suit, on a teal striped background." loading="lazy" decoding="async" width="600" height="900" style="background-image:url(data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAAAAAAD/2wBDAA0JCgsKCA0LCgsODg0PEyAVExISEyccHhcgLikxMC4pLSwzOko+MzZGNywtQFdBRkxOUlNSMj5aYVpQYEpRUk//2wBDAQ4ODhMREyYVFSZPNS01T09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0//wAARCAAkABgDASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAUEAgf/xAArEAABAwMCAwcFAAAAAAAAAAABAgMEAAURITESQWEGExQiUXHwIzJSkaH/xAAXAQADAQAAAAAAAAAAAAAAAAABAgMA/8QAIBEAAgICAQUBAAAAAAAAAAAAAQIAAxEhMRITFCJhUf/aAAwDAQACEQMRAD8Av366vogERkPR5CgSknlyyfnKoLt2mk8JefyNCfyAxnoM5P7FUO0sl6VOUuOuOY7SQEq79JKuZIA1qQ5ClMMRu9cYCJGVoTurBO5G3Wq92qsexm8XvHqVsfACZvs0uU7cXAwC4SF6LUcJwrbf2FK6ssPwU1uS9PjIQQoqb7zhUSc7g9daUGdW2vECgVemc4k65x27ZPdakOENIUUlXqDt861RWu2S7Eh2epLTkNJS3wOFzKQPKrbnms3aqLJF0LwQBHcPGonXB5pPWsKLipcNxhoJIfIBOdTjYY5a0DQrHP7J1lqq8HWM4+7mllgXKSW4zieIAHU/d7e29KmjxUSRHe4SVqV9NspIUNSNB6mlLVQKlCA6gtTynNjDc9Hu0FmfGDL5UE8WfLoahx+zUOI8h9h6ShaFZT5hp/KUqi8RiASZWMZuRKbnPguPtpKEKOyR0FKUqZ5jjif/2Q==)">
           </a>
           <div class="game-copy">
             <div class="game-tags"><span>COURTROOM RPG</span><span>IN DEVELOPMENT</span><span>WINDOWS · MAC · IOS · ANDROID</span></div>
-            <h3><img class="game-wordmark keyart" src="assets/legal-beagll-key-art.webp" alt="Benny, a beagle in a pinstripe suit, striking a pose in front of neon stripes." width="1200" height="628"><span>Justice is Argued</span></h3>
+            <h3><img class="game-wordmark keyart" src="assets/legal-beagll-key-art.webp" alt="Legal Beagll" width="1200" height="628"><span>Justice is Argued</span></h3>
             <p>You play Harold Beagll, a golden retriever attorney. Between trials you walk around Beagll Town, talking to suspects and digging up clues.</p>
             <p>In court, every fight is a turn-based argument. Witnesses and prosecutors argue back. A good objection can wear them down or win over the jury, and a bad one leaves Harold tongue-tied.</p>
             <a class="button button-light" href="https://store.steampowered.com/app/3988040/Legal_Beagll_Justice_is_Argued/" target="_blank" rel="noopener noreferrer"><svg aria-hidden="true"><use href="#steam"/></svg> Wishlist on Steam <svg aria-hidden="true"><use href="#arrow-up"/></svg><span class="sr-only"> (opens in a new tab)</span></a>
@@ -131,6 +134,12 @@
             </li>
           </ul>
           <div id="cast-detail" class="cast-detail" aria-live="polite"><div class="cast-detail-clip"><div class="cast-detail-body"></div></div></div>
+        </div>
+        <div id="trailer" class="trailer" hidden>
+          <div class="screenshots-heading"><span class="eyebrow">THE TRAILER</span><a href="https://www.youtube.com/@FlowerIndustries" target="_blank" rel="noopener noreferrer">Watch on YouTube <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a></div>
+          <div class="video-facade" data-video="" data-title="Legal Beagll: Justice is Argued trailer">
+            <button type="button" class="video-play"><img src="assets/legal-beagll-key-art.webp" alt="" width="1600" height="837" loading="lazy" decoding="async"><span class="video-play-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span><span class="video-play-label">Play the trailer<span class="sr-only"> (loads a YouTube player)</span></span></button>
+          </div>
         </div>
         <div class="screenshots-heading"><span class="eyebrow">A LOOK INSIDE BEAGLL TOWN</span><span>In-game screenshots <span aria-hidden="true">↙</span></span></div>
         <div class="screenshots">
@@ -160,8 +169,8 @@
   </main>
   <footer class="site-footer">
     <div class="container footer-top">
-      <a class="brand" href="index.html" aria-label="Flower Industries home"><img class="brand-logo" src="assets/brand/bee-128.png" alt="" width="44" height="44"><svg class="wordmark" viewBox="0 20 400 130" role="img" aria-label="Flower Industries"><text x="10" y="88" text-anchor="start" font-size="80" letter-spacing="-2">flower</text><text class="wm-bold" transform="skewX(-18) translate(43 0)" x="200" y="132" text-anchor="middle" textLength="380" lengthAdjust="spacing" font-size="46">INDUSTRIES</text></svg></a>
-      <div class="footer-links"><a href="https://store.steampowered.com/app/3988040/Legal_Beagll_Justice_is_Argued/" target="_blank" rel="noopener noreferrer">Steam <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.youtube.com/@FlowerIndustries" target="_blank" rel="noopener noreferrer">YouTube <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.twitch.tv/directory/category/legal-beagll-justice-is-argued" target="_blank" rel="noopener noreferrer">Twitch <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.tiktok.com/@flower.industries" target="_blank" rel="noopener noreferrer">TikTok <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.instagram.com/legalbeagll/" target="_blank" rel="noopener noreferrer">Instagram <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://bsky.app/profile/legalbeagll.bsky.social" target="_blank" rel="noopener noreferrer">Bluesky <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
+      <a class="brand" href="#home" aria-label="Flower Industries home"><img class="brand-logo" src="assets/brand/bee-128.png" alt="" width="44" height="44"><svg class="wordmark" viewBox="0 20 400 130" role="img" aria-label="Flower Industries"><text x="10" y="88" text-anchor="start" font-size="80" letter-spacing="-2">flower</text><text class="wm-bold" transform="skewX(-18) translate(43 0)" x="200" y="132" text-anchor="middle" textLength="380" lengthAdjust="spacing" font-size="46">INDUSTRIES</text></svg></a>
+      <div class="footer-links"><a href="https://store.steampowered.com/app/3988040/Legal_Beagll_Justice_is_Argued/" target="_blank" rel="noopener noreferrer">Steam <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.youtube.com/@FlowerIndustries" target="_blank" rel="noopener noreferrer">YouTube <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.twitch.tv/directory/category/legal-beagll-justice-is-argued" target="_blank" rel="noopener noreferrer">Twitch <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.tiktok.com/@flower.industries" target="_blank" rel="noopener noreferrer">TikTok <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://www.instagram.com/legalbeagll/" target="_blank" rel="noopener noreferrer">Instagram <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="https://bsky.app/profile/legalbeagll.bsky.social" target="_blank" rel="noopener noreferrer">Bluesky <span aria-hidden="true">↗</span><span class="sr-only"> (opens in a new tab)</span></a><a href="press.html">Press</a><a href="contact.html">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div>
     </div>
     <div class="container footer-bottom"><span>© <span id="year">2026</span> Flower Industries LLC. All rights reserved.</span><span>MADE IN CALIFORNIA</span></div>
   </footer>

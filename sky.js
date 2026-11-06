@@ -1,7 +1,10 @@
 // Twinkle Sky: web port of Legal Beagll's twinkle_sky.tscn (stars → moon → fog).
 // Fixed behind the whole page. Stars follow twinkle_stars_spec.md; colours follow the
 // rendered reference (additive indigo crosses, occasional lavender centre).
-const SKY_ASSETS = new URL('assets/sky/', (document.currentScript && document.currentScript.src) || location.href).href; // resolves from the script, so it works at any page depth (e.g. 404)
+// URLs resolve from the script itself (captured now; document.currentScript is null later), so they work at any page depth (e.g. 404).
+const SKY_SRC = (document.currentScript && document.currentScript.src) || location.href;
+const SKY_ASSETS = new URL('assets/sky/', SKY_SRC).href;
+const SKY_WORKER = new URL('sky-worker.js' + new URL(SKY_SRC).search, SKY_SRC).href;   // shares sky.js's ?v= so one bump refreshes both
 function initSky() {
   const canvas = document.querySelector('.page-sky');
   if (!canvas) return;
@@ -23,54 +26,19 @@ function initSky() {
   const INDIGO = [22, 4, 72];
   const LAVENDER = [238, 234, 250];   // near-white centre on the strongest stars
 
-  function hash2(x, y, seed) {
-    let h = (x * 374761393 + y * 668265263 + seed * 1442695041) | 0;
-    h = Math.imul(h ^ (h >>> 13), 1274126177); h ^= h >>> 16;
-    return (h >>> 0) / 4294967296;
-  }
-  function cellular(x, y, seed) {
-    const cx = Math.floor(x), cy = Math.floor(y); let best = 1e9;
-    for (let j = -1; j <= 1; j++) for (let i = -1; i <= 1; i++) {
-      const gx = cx + i, gy = cy + j;
-      const dx = gx + hash2(gx, gy, seed) - x, dy = gy + hash2(gx, gy, seed + 7919) - y;
-      const d = dx * dx + dy * dy; if (d < best) best = d;
-    }
-    return Math.sqrt(best);
-  }
   // NOISE_LINEAR: true = read the noise the way Godot's linear filter does (each star bleeds into its
   // neighbours as faint fractional samples that stack additively); false = one crisp stamp per texel.
   const NOISE_LINEAR = false;
   const SUB = NOISE_LINEAR ? 2 : 1, SG = GRID * SUB;
   const GRAD_A = [15, 0, 53], GRAD_B = [255, 255, 255], GRADIENT_BIAS = -0.2;
-  function makeLayer(L) {
-    const noise = new Float32Array(GRID * GRID);
-    let min = Infinity, max = -Infinity;
-    for (let y = 0; y < GRID; y++) for (let x = 0; x < GRID; x++) {
-      const v = cellular((x + OFFSET[0]) * L.freq, (y + OFFSET[1]) * L.freq, L.seed);
-      noise[y * GRID + x] = v; if (v < min) min = v; if (v > max) max = v;
-    }
-    const range = max - min || 1;
-    for (let i = 0; i < noise.length; i++) {
-      const d = (noise[i] - min) / range;
-      if (d >= RAMP_CUT) { noise[i] = 0; continue; }
-      const t = d / RAMP_CUT; noise[i] = RAMP_TOP * (1 - (0.5 * t + 1.5 * t * t - t * t * t));
-    }
-    const fine = new Float32Array(SG * SG), samples = [];
-    if (NOISE_LINEAR) {
-      const n = (xx, yy) => noise[(((yy % GRID) + GRID) % GRID) * GRID + (((xx % GRID) + GRID) % GRID)];
-      for (let y = 0; y < SG; y++) for (let x = 0; x < SG; x++) {
-        const fx = (x + 0.5) / SUB - 0.5, fy = (y + 0.5) / SUB - 0.5;
-        const x0 = Math.floor(fx), y0 = Math.floor(fy), tx = fx - x0, ty = fy - y0;
-        const v = (n(x0, y0) * (1 - tx) + n(x0 + 1, y0) * tx) * (1 - ty) + (n(x0, y0 + 1) * (1 - tx) + n(x0 + 1, y0 + 1) * tx) * ty;
-        if (v > 0.002) { fine[y * SG + x] = v; samples.push(y * SG + x); }
-      }
-    } else {
-      for (let i = 0; i < noise.length; i++) if (noise[i] > 0) { fine[i] = noise[i]; samples.push(i); }
-    }
+  const FOG = 256;
+  // The noise itself (cellular star fields, FBM fog) is generateSky in sky-worker.js: ~0.5 s of maths that runs off the main thread when it can.
+  const skyConfig = { layers: LAYERS, grid: GRID, offset: OFFSET, rampCut: RAMP_CUT, rampTop: RAMP_TOP, linear: NOISE_LINEAR, fog: FOG };
+  function makeLayer(L, gen) {   // gen = { fine, samples, rolls } from generateSky
     const canvas = document.createElement('canvas'); canvas.width = SG; canvas.height = SG;
     const ctx = canvas.getContext('2d');
     const img = ctx.createImageData(SG, SG);
-    return { ...L, fine, samples, canvas, ctx, img, lastKey: '' };
+    return { ...L, ...gen, canvas, ctx, img, lastKey: '' };
   }
   function stampLayer(Lr, p) {
     const px = Lr.img.data, G = SG;
@@ -100,7 +68,7 @@ function initSky() {
         add(sx + c, sy + d, col, k); add(sx + c, sy - d, col, k); add(sx + d, sy + c, col, k); add(sx - d, sy + c, col, k);
       }
       // White centres: the bigger the star, the likelier (3x3 cores ~45%, 1x1 cores ~4%, nearer layers a touch more).
-      const r = hash2(sx, sy, 99);
+      const r = Lr.rolls[n];   // hash2(sx, sy, 99), rolled by generateSky
       const chance = (I >= 0.5 ? 1.0 : 0.5) * (0.85 + 0.15 * Lr.bright / 4);
       if (r < chance) {
         add(sx, sy, LAVENDER, 1);
@@ -109,7 +77,7 @@ function initSky() {
     }
     Lr.ctx.putImageData(Lr.img, 0, 0);
   }
-  const layers = LAYERS.map(makeLayer);
+  let layers = [];   // built by show() once the noise arrives
 
   function keyed(keys, t) {
     for (let i = 0; i < keys.length - 1; i++) { const [t0, v0] = keys[i], [t1, v1] = keys[i + 1];
@@ -120,36 +88,8 @@ function initSky() {
   const baseParams = { max_star_size: 3, bloom_strength: 1, bloom_radius: 2, intensity_scale: 1.1 };
   function paramsAt(ms, phase) { const t = (ms * SPEED / 4000 + phase) % 5; return { max_star_size: keyed(idle.max_star_size, t), bloom_strength: keyed(idle.bloom_strength, t), bloom_radius: Math.round(keyed(idle.bloom_radius, t)), intensity_scale: keyed(idle.intensity_scale, t) }; }
 
-  // ------------------------------------------------------------ fog (tileable FBM value noise, pre-baked RGBA)
-  const FOG = 256;
+  // ------------------------------------------------------------ fog (tileable FBM value noise, pre-baked RGBA by generateSky)
   const fogLayer = document.createElement('canvas'); fogLayer.width = FOG; fogLayer.height = FOG;
-  {
-    function vnoise(x, y, period, seed) { // tileable value noise
-      const xi = Math.floor(x), yi = Math.floor(y), xf = x - xi, yf = y - yi;
-      const sx = xf * xf * (3 - 2 * xf), sy = yf * yf * (3 - 2 * yf);
-      const h = (a, b) => hash2(((a % period) + period) % period, ((b % period) + period) % period, seed);
-      const a = h(xi, yi), b = h(xi + 1, yi), c = h(xi, yi + 1), d = h(xi + 1, yi + 1);
-      return (a + (b - a) * sx) * (1 - sy) + (c + (d - c) * sx) * sy;
-    }
-    const data = fogLayer.getContext('2d').createImageData(FOG, FOG), fp = data.data;
-    const vals = new Float32Array(FOG * FOG); let mn = Infinity, mx = -Infinity;
-    for (let y = 0; y < FOG; y++) for (let x = 0; x < FOG; x++) {
-      let v = 0, amp = 1, freq = 4, norm = 0;
-      for (let o = 0; o < 5; o++) { v += vnoise(x / FOG * freq, y / FOG * freq, freq, 31 + o) * amp; norm += amp; amp *= 0.5; freq *= 2; }
-      v /= norm; vals[y * FOG + x] = v; if (v < mn) mn = v; if (v > mx) mx = v;
-    }
-    // ramp 0 → 0.7307: 0.987 → 1, then fog = clamp(n*2-1) * 0.25, colour from the blue→purple gradient over 0..0.25
-    const G0 = [53, 44, 154], G1 = [109, 49, 142];
-    for (let i = 0; i < vals.length; i++) {
-      const n0 = (vals[i] - mn) / (mx - mn);
-      const n = n0 < 0.7307 ? n0 / 0.7307 * 0.98667 : 0.98667 + (n0 - 0.7307) / (1 - 0.7307) * 0.01333;
-      const fog = Math.min(1, Math.max(0, n * 2 - 1)) * 0.25;
-      const g = Math.min(1, fog / 0.2267);
-      fp[i * 4] = G0[0] + (G1[0] - G0[0]) * g; fp[i * 4 + 1] = G0[1] + (G1[1] - G0[1]) * g; fp[i * 4 + 2] = G0[2] + (G1[2] - G0[2]) * g;
-      fp[i * 4 + 3] = Math.round(fog * 255);
-    }
-    fogLayer.getContext('2d').putImageData(data, 0, 0);
-  }
 
   // ------------------------------------------------------------ moon + trees (placement.json, 1920x1080 stage)
   const placement = [
@@ -166,10 +106,11 @@ function initSky() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     canvas.width = Math.round(window.innerWidth * dpr); canvas.height = Math.round(window.innerHeight * dpr);
   }
-  resize(); window.addEventListener('resize', resize);
+  resize();
+  // Setting the canvas size wipes it; with reduced motion no frame loop runs, so redraw at once rather than wait for a scroll.
+  window.addEventListener('resize', () => { resize(); if (reduceMotion && layers.length) frame(performance.now()); });
 
-  let lastKey = '';
-  const start = performance.now();
+  let start = 0;
   function frame(now) {
     const W = canvas.width, H = canvas.height;
     ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
@@ -209,9 +150,29 @@ function initSky() {
 
     if (!reduceMotion) requestAnimationFrame(frame);
   }
-  requestAnimationFrame(frame);
-  requestAnimationFrame(() => canvas.classList.add('is-ready'));
-  if (reduceMotion) { window.addEventListener('scroll', () => frame(performance.now()), { passive: true }); Object.values(images).forEach(im => im.addEventListener('load', () => frame(performance.now()))); }
+  // Nothing is drawn, and the fade-in not started, until the stars and fog exist, so the fade reveals the finished sky.
+  function show(sky) {
+    layers = LAYERS.map((L, i) => makeLayer(L, sky.layers[i]));
+    fogLayer.getContext('2d').putImageData(new ImageData(sky.fog, FOG, FOG), 0, 0);
+    start = performance.now();
+    requestAnimationFrame(frame);
+    requestAnimationFrame(() => canvas.classList.add('is-ready'));
+    if (reduceMotion) { window.addEventListener('scroll', () => frame(performance.now()), { passive: true }); Object.values(images).forEach(im => im.addEventListener('load', () => frame(performance.now()))); }
+  }
+  // Generate in a worker so the maths never delays a tap; if workers are unavailable or fail, run the same file on the main thread.
+  let worker = null, settled = false;
+  function fallback() {
+    if (settled) return; settled = true;
+    if (worker) { worker.terminate(); worker = null; }
+    if (typeof generateSky === 'function') return show(generateSky(skyConfig));
+    const s = document.createElement('script'); s.src = SKY_WORKER; s.onload = () => show(generateSky(skyConfig)); document.head.appendChild(s);
+  }
+  try {
+    worker = new Worker(SKY_WORKER);
+    worker.onerror = fallback;
+    worker.onmessage = e => { if (settled) return; settled = true; worker.terminate(); worker = null; show(e.data); };
+    worker.postMessage(skyConfig);
+  } catch (e) { fallback(); }
 }
 // Build the sky after the page has painted so it never delays the first view.
 if ('requestIdleCallback' in window) requestIdleCallback(initSky, { timeout: 800 }); else setTimeout(initSky, 60);
